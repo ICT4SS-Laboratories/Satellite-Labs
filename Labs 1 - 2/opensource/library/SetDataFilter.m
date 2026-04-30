@@ -14,7 +14,7 @@ dataFilter{1,2}   = 'FullBiasNanos ~= 0';
 
 % Filter of C/No
 dataFilter{end+1,1} = 'Cn0DbHz';
-dataFilter{end,2} = 'Cn0DbHz>0';
+dataFilter{end,2} = 'Cn0DbHz>20';
 
 %you can create other filters in the same way ...
 %for example, suppose you want to remove Svid 23:
@@ -37,7 +37,7 @@ dataFilter{end,2} = 'Cn0DbHz>0';
 
 %limit to GPS only:
 dataFilter{end+1,1} = 'ConstellationType'; 
-dataFilter{end,2}   = 'ConstellationType==3';
+dataFilter{end,2}   = 'ConstellationType==1 | ConstellationType==6';
 %ConstellationType values are defined in Android HAL Documentation, gps.h, 
 %   typedef uint8_t                         GnssConstellationType;
 %   #define GNSS_CONSTELLATION_UNKNOWN      0

@@ -24,17 +24,15 @@ addpath('library')
 %% input data (GNSS logger)
 % To add your own data:
 % save data from GnssLogger App, and edit dirName and prFileName appropriately
-prFileName    = 'gnss_log_2026_03_16_13_27_35.txt';
+prFileName    = 'gnss_log_2026_03_26_13_36_19.txt';
 dirName       = 'files/';
 
 %% true position
 % param.llaTrueDegDegM = [];
 %enter true WGS84 lla, if you know it:
-param.llaTrueDegDegM = [
-    45 + 3/60 + 55.6036/3600, ...
-    7 + 39/60 + 30.3144/3600, ...
-    250
-    ];  % Rooms I area
+%param.llaTrueDegDegM = [37.422578, -122.081678, -28]; %Charleston Park Test Site
+%param.llaTrueDegDegM = [45.065361, 7.658372, 245.7];  % Rooms I area
+param.llaTrueDegDegM = [45.064491, 7.65905, 277];  % Under DET
 
 %% Set the data filter and Read log file
 dataFilter = SetDataFilter;
@@ -44,8 +42,8 @@ if isempty(gnssRaw), return, end
 %% Get online ephemeris from Nasa CCDIS service, first compute UTC Time from gnssRaw:
 fctSeconds = 1e-3*double(gnssRaw.allRxMillis(end));
 utcTime = Gps2Utc([],fctSeconds);
-%allGpsEph = GetNasaHourlyEphemeris(utcTime,dirName);
-%if isempty(allGpsEph), return, end
+allGpsEph = GetNasaHourlyEphemeris(utcTime,dirName);
+if isempty(allGpsEph), return, end
 
 %% process raw measurements, compute pseudoranges:
 [gnssMeas] = ProcessGnssMeas(gnssRaw);
@@ -65,8 +63,8 @@ h3 = figure;
 PlotCno(gnssMeas,prFileName,colors);
 
 %% compute WLS position and velocity
-% gpsPvt = GpsWlsPvt(gnssMeas,allGpsEph);
-gpsPvt = [];
+gpsPvt = GpsWlsPvt(gnssMeas,allGpsEph);
+%gpsPvt = [];
 
 if ~isempty(gpsPvt)
     %% plot PVT results
